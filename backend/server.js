@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import mongoose from 'mongoose';
 import connectDB, { getConnectionStatus } from './config/db.js';
 import authRoutes from './routes/auth.js';
 import agentRoutes from './routes/agents.js';
@@ -33,6 +34,22 @@ app.get('/api/health', (req, res) => {
     db: getConnectionStatus() ? 'connected' : 'disconnected',
     timestamp: new Date().toISOString(),
   });
+});
+
+app.get('/api/data', async (req, res) => {
+  try {
+    if (!getConnectionStatus()) return res.json({ message: 'MongoDB not connected', data: null });
+    const collections = await mongoose.connection.db.listCollections().toArray();
+    const result = {};
+    for (const col of collections) {
+      const docs = await mongoose.connection.db.collection(col.name).find().limit(3).toArray();
+      const count = await mongoose.connection.db.collection(col.name).countDocuments();
+      result[col.name] = { total: count, samples: docs };
+    }
+    res.json({ message: 'MongoDB Data', db: 'connected', collections: result });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 app.use((err, req, res, next) => {
