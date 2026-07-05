@@ -37,7 +37,8 @@ export const register = async (req, res) => {
 
     const userData = await User.findById(user._id).populate('organization');
     const token = generateToken(user._id);
-    res.status(201).json({ token, user: userData });
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
+    res.status(201).json({ token, user: userData, url: `${baseUrl}/api/user/${user._id}` });
   } catch (err) {
     console.error('Register error:', err);
     res.status(500).json({ message: err.message || 'Registration failed' });
@@ -60,7 +61,8 @@ export const login = async (req, res) => {
     }
     const userData = await User.findById(user._id).populate('organization');
     const token = generateToken(user._id);
-    res.json({ token, user: userData });
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
+    res.json({ token, user: userData, url: `${baseUrl}/api/user/${user._id}` });
   } catch (err) {
     console.error('Login error:', err);
     res.status(500).json({ message: err.message || 'Login failed' });

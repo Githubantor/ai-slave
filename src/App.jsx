@@ -18,6 +18,7 @@ import AutomationEngine from './components/automation/AutomationEngine';
 import AdminPanel from './components/admin/AdminPanel';
 import Settings from './components/settings/Settings';
 import { LoginPage, RegisterPage } from './components/auth/AuthPages';
+import UserProfile from './components/user/UserProfile';
 import { Bot } from 'lucide-react';
 
 function ProtectedRoute({ children }) {
@@ -45,6 +46,7 @@ function PublicRoutes() {
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route path="/user/:id" element={<UserProfile />} />
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   );
