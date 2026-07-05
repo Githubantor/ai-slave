@@ -17,6 +17,7 @@ export function AppProvider({ children }) {
     { id: 3, message: 'CEO AI completed Q3 strategy analysis', read: true, time: '1h ago' },
   ]);
   const [ceoAnalysis, setCeoAnalysis] = useState(null);
+  const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
   const [backendAvailable, setBackendAvailable] = useState(true);
 
@@ -58,6 +59,7 @@ export function AppProvider({ children }) {
       setApprovals(approvalsData);
       setActivity(Array.isArray(activityData) ? activityData : []);
       setGoals(goalsData);
+      if (statsData.recentLeads) setLeads(statsData.recentLeads);
       setBackendAvailable(true);
     } catch (err) {
       console.warn('API fetch failed, using mock data:', err.message);
@@ -110,6 +112,29 @@ export function AppProvider({ children }) {
     }
     setApprovals(prev => prev.filter(a => (a._id || a.id) !== id));
     addNotification('Approval request was rejected');
+  };
+
+  const fetchLeads = async () => {
+    if (backendAvailable) {
+      try {
+        const data = await api.getLeads();
+        setLeads(data);
+        return data;
+      } catch { /* fallback */ }
+    }
+    setLeads([]);
+    return [];
+  };
+
+  const researchLeads = async (industry) => {
+    if (backendAvailable) {
+      try {
+        const result = await api.researchLeads(industry);
+        await fetchLeads();
+        return result;
+      } catch { /* fallback */ }
+    }
+    return null;
   };
 
   const createNewTask = async (taskData) => {
@@ -174,9 +199,10 @@ export function AppProvider({ children }) {
   return (
     <AppContext.Provider value={{
       tasks, approvals, activity, agents, goals, dashboardStats, notifications,
-      ceoAnalysis, loading, backendAvailable,
+      ceoAnalysis, leads, loading, backendAvailable,
       setApprovals, addActivity, addNotification, approveRequest, rejectRequest,
       updateTaskStatus, runCeoAnalysis, setCeoAnalysis, refreshDashboard, createNewTask,
+      fetchLeads, researchLeads,
     }}>
       {children}
     </AppContext.Provider>

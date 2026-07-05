@@ -134,6 +134,14 @@ class ApiService {
   deleteDocument(id) {
     return this.request(`/knowledge/${id}`, { method: 'DELETE' });
   }
+
+  getLeads() {
+    return this.request('/leads');
+  }
+
+  researchLeads(industry) {
+    return this.request('/leads/research', { method: 'POST', body: { industry } });
+  }
 }
 
 export default new ApiService();

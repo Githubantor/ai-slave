@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import {
   Bot, Activity, CheckCircle, Target, FileText, Users,
-  Pen, Briefcase, Wifi
+  Pen, Briefcase, Wifi, Building, Globe, ChevronRight
 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
 import StatCard from './StatCard';
@@ -28,7 +29,7 @@ const monthlyData = [
 ];
 
 export default function Dashboard() {
-  const { dashboardStats, agents } = useApp();
+  const { dashboardStats, agents, leads } = useApp();
 
   const stats = dashboardStats ? [
     { icon: Bot, label: 'AI Employees', value: dashboardStats.totalEmployees || 0, color: 'from-purple-500 to-pink-500' },
@@ -92,6 +93,43 @@ export default function Dashboard() {
           ))}
         </div>
       </motion.div>
+
+      {leads && leads.length > 0 && (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold">Recent Leads (No Website)</h2>
+            <Link to="/leads" className="text-sm text-accent-400 hover:text-accent-300 flex items-center gap-1">
+              View all <ChevronRight size={14} />
+            </Link>
+          </div>
+          <div className="glass-card overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-glass-border">
+                    <th className="text-left p-3 text-xs text-surface-400 font-medium uppercase">Company</th>
+                    <th className="text-left p-3 text-xs text-surface-400 font-medium uppercase">Contact</th>
+                    <th className="text-left p-3 text-xs text-surface-400 font-medium uppercase">Industry</th>
+                    <th className="text-left p-3 text-xs text-surface-400 font-medium uppercase">Website</th>
+                    <th className="text-left p-3 text-xs text-surface-400 font-medium uppercase">Score</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {leads.slice(0, 5).map((lead, i) => (
+                    <tr key={lead._id} className="border-b border-glass-border hover:bg-glass-light transition-colors">
+                      <td className="p-3"><div className="flex items-center gap-2"><Building size={14} className="text-surface-400" /><span className="text-sm text-surface-200">{lead.company}</span></div></td>
+                      <td className="p-3"><span className="text-sm text-surface-300">{lead.contactName}</span></td>
+                      <td className="p-3"><span className="badge-blue text-xs">{lead.industry}</span></td>
+                      <td className="p-3"><div className="flex items-center gap-1.5"><Globe size={14} className="text-red-400" /><span className="text-xs text-red-400">No website</span></div></td>
+                      <td className="p-3"><span className={`badge ${lead.score >= 70 ? 'badge-green' : lead.score >= 40 ? 'badge-yellow' : 'badge-gray'}`}>{lead.score}</span></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </motion.div>
+      )}
     </div>
   );
 }

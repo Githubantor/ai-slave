@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, Bot, Target, BarChart3, Users, Search,
   Code2, Settings, Shield, Database, Workflow, Briefcase,
-  ChevronLeft, ChevronRight, GraduationCap, Receipt, Megaphone, Sliders,
+  ChevronLeft, ChevronRight, GraduationCap, Receipt, Megaphone, Sliders, Globe,
 } from 'lucide-react';
 
 const navItems = [
@@ -19,6 +19,7 @@ const navItems = [
   { to: '/hr', icon: GraduationCap, label: 'HR' },
   { to: '/tasks', icon: BarChart3, label: 'Tasks' },
   { to: '/approvals', icon: Shield, label: 'Approvals' },
+  { to: '/leads', icon: Globe, label: 'Leads' },
   { to: '/knowledge', icon: Database, label: 'Knowledge' },
   { to: '/automation', icon: Workflow, label: 'Automation' },
   { to: '/admin', icon: Sliders, label: 'Admin' },

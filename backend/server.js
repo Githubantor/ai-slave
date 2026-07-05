@@ -12,6 +12,7 @@ import approvalRoutes from './routes/approvals.js';
 import activityRoutes from './routes/activity.js';
 import knowledgeRoutes from './routes/knowledge.js';
 import dashboardRoutes from './routes/dashboard.js';
+import leadRoutes from './routes/leads.js';
 import { initEmail, sendEmail } from './utils/email.js';
 
 const app = express();
@@ -49,6 +50,7 @@ app.use('/api/approvals', approvalRoutes);
 app.use('/api/activity', activityRoutes);
 app.use('/api/knowledge', knowledgeRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/leads', leadRoutes);
 
 app.post('/api/send-email', async (req, res) => {
   try {

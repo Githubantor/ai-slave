@@ -15,6 +15,7 @@ import TaskSystem from './components/tasks/TaskSystem';
 import ApprovalSystem from './components/approvals/ApprovalSystem';
 import KnowledgeBase from './components/knowledge/KnowledgeBase';
 import AutomationEngine from './components/automation/AutomationEngine';
+import LeadsPage from './components/leads/LeadsPage';
 import AdminPanel from './components/admin/AdminPanel';
 import Settings from './components/settings/Settings';
 import { LoginPage, RegisterPage } from './components/auth/AuthPages';
@@ -73,6 +74,7 @@ function AppRoutes() {
           <Route path="tasks" element={<TaskSystem />} />
           <Route path="approvals" element={<ApprovalSystem />} />
           <Route path="knowledge" element={<KnowledgeBase />} />
+          <Route path="leads" element={<LeadsPage />} />
           <Route path="automation" element={<AutomationEngine />} />
           <Route path="admin" element={<AdminPanel />} />
           <Route path="settings" element={<Settings />} />
