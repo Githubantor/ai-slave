@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    @apply bg-surface-950 text-white font-sans;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-surface-900;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-surface-600 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-surface-500;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-glass backdrop-blur-xl border border-glass-border;
+  }
+  .glass-hover {
+    @apply hover:bg-glass-light transition-all duration-300;
+  }
+  .glass-card {
+    @apply glass rounded-2xl shadow-lg;
+  }
+  .btn-primary {
+    @apply px-6 py-2.5 bg-accent-600 hover:bg-accent-500 text-white rounded-xl font-medium transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-secondary {
+    @apply px-6 py-2.5 glass glass-hover text-white rounded-xl font-medium transition-all duration-200 active:scale-[0.98];
+  }
+  .btn-ghost {
+    @apply px-4 py-2 hover:bg-glass-light text-surface-300 hover:text-white rounded-lg transition-all duration-200;
+  }
+  .btn-danger {
+    @apply px-6 py-2.5 bg-red-600 hover:bg-red-500 text-white rounded-xl font-medium transition-all duration-200;
+  }
+  .btn-success {
+    @apply px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-medium transition-all duration-200;
+  }
+  .input-field {
+    @apply w-full px-4 py-2.5 bg-surface-800 border border-glass-border rounded-xl text-white placeholder-surface-400 focus:outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500 transition-all;
+  }
+  .badge {
+    @apply px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  .badge-green {
+    @apply badge bg-emerald-500/20 text-emerald-400;
+  }
+  .badge-blue {
+    @apply badge bg-blue-500/20 text-blue-400;
+  }
+  .badge-yellow {
+    @apply badge bg-amber-500/20 text-amber-400;
+  }
+  .badge-red {
+    @apply badge bg-red-500/20 text-red-400;
+  }
+  .badge-purple {
+    @apply badge bg-purple-500/20 text-purple-400;
+  }
+  .badge-gray {
+    @apply badge bg-surface-600/30 text-surface-400;
+  }
+  .gradient-text {
+    @apply bg-gradient-to-r from-accent-400 to-purple-400 bg-clip-text text-transparent;
+  }
+  .gradient-border {
+    @apply relative;
+  }
+  .gradient-border::before {
+    content: '';
+    @apply absolute -inset-[1px] rounded-[inherit] bg-gradient-to-r from-accent-500/50 to-purple-500/50 -z-10;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
