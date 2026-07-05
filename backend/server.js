@@ -20,6 +20,16 @@ app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
+app.get('/api/users', async (req, res) => {
+  try {
+    const users = await User.find().select('-password').populate('organization');
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
+    res.json({ total: users.length, users: users.map(u => ({ ...u.toObject(), url: `${baseUrl}/api/user/${u._id}` })) });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 app.get('/api/user/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select('-password').populate('organization');
