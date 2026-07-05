@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import ActivityFeed from './ActivityFeed';
 
-export default function Layout() {
+export default function Layout({ children }) {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
@@ -17,7 +16,7 @@ export default function Layout() {
         <Header />
         <div className="flex-1 flex">
           <main className="flex-1 p-6 overflow-y-auto">
-            <Outlet />
+            {children}
           </main>
           <aside className="w-80 shrink-0 border-l border-glass-border p-4 hidden xl:block overflow-y-auto">
             <div className="flex items-center gap-2 mb-4">
