@@ -12,6 +12,7 @@ import approvalRoutes from './routes/approvals.js';
 import activityRoutes from './routes/activity.js';
 import knowledgeRoutes from './routes/knowledge.js';
 import dashboardRoutes from './routes/dashboard.js';
+import { initEmail, sendEmail } from './utils/email.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -49,6 +50,17 @@ app.use('/api/activity', activityRoutes);
 app.use('/api/knowledge', knowledgeRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 
+app.post('/api/send-email', async (req, res) => {
+  try {
+    const { to, subject, text } = req.body;
+    if (!to) return res.status(400).json({ message: 'Recipient email required' });
+    const ok = await sendEmail({ to, subject: subject || 'Test from AI Company OS', text: text || 'This is a test email from your AI system.' });
+    res.json({ success: ok, message: ok ? 'Email sent' : 'Email not configured' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',
@@ -84,6 +96,7 @@ const start = async () => {
   try {
     await connectDB();
     console.log('\n  MongoDB: Connected');
+    initEmail();
   } catch {
     console.log('  MongoDB: Disconnected (retrying every 10s)...');
     console.log('  The frontend will use mock data until MongoDB connects.\n');

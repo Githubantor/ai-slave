@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Bot, Target, ChevronRight, CheckCircle, Clock, AlertCircle, Users, BarChart3 } from 'lucide-react';
+import { Send, Bot, Target, ChevronRight, CheckCircle, Clock, AlertCircle, Users, BarChart3, Plus, Mail, User } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
 const suggestions = [
@@ -12,12 +12,21 @@ const suggestions = [
 ];
 
 export default function CEOPage() {
-  const { ceoObjective, ceoAnalysis, setCeoObjective, runCeoAnalysis } = useApp();
+  const { ceoAnalysis, runCeoAnalysis, createNewTask } = useApp();
   const [input, setInput] = useState('');
+  const [showTaskForm, setShowTaskForm] = useState(false);
+  const [task, setTask] = useState({ title: '', description: '', clientEmail: '', clientName: '', priority: 'medium' });
 
   const handleSubmit = () => {
     if (!input.trim()) return;
     runCeoAnalysis(input);
+  };
+
+  const handleCreateTask = async () => {
+    if (!task.title.trim()) return;
+    await createNewTask(task);
+    setTask({ title: '', description: '', clientEmail: '', clientName: '', priority: 'medium' });
+    setShowTaskForm(false);
   };
 
   return (
@@ -66,6 +75,65 @@ export default function CEOPage() {
             </button>
           ))}
         </div>
+      </motion.div>
+
+      <motion.div className="glass-card p-6">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center">
+              <Plus size={20} className="text-white" />
+            </div>
+            <div>
+              <h2 className="font-semibold">Direct Task Assignment</h2>
+              <p className="text-xs text-surface-400">Create a task and notify the client via email</p>
+            </div>
+          </div>
+          <button onClick={() => setShowTaskForm(!showTaskForm)} className="btn-primary text-sm">
+            {showTaskForm ? 'Cancel' : 'New Task'}
+          </button>
+        </div>
+
+        <AnimatePresence>
+          {showTaskForm && (
+            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
+              <div className="space-y-3 pt-4 border-t border-surface-800">
+                <input value={task.title} onChange={e => setTask({ ...task, title: e.target.value })} placeholder="Task title *" className="input-field" />
+                <textarea value={task.description} onChange={e => setTask({ ...task, description: e.target.value })} placeholder="Task description (optional)" className="input-field min-h-[80px]" />
+                <div className="flex gap-3">
+                  <div className="relative flex-1">
+                    <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-surface-400" />
+                    <input value={task.clientName} onChange={e => setTask({ ...task, clientName: e.target.value })} placeholder="Client name" className="input-field pl-10" />
+                  </div>
+                  <div className="relative flex-1">
+                    <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-surface-400" />
+                    <input value={task.clientEmail} onChange={e => setTask({ ...task, clientEmail: e.target.value })} placeholder="Client email" className="input-field pl-10" />
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <select value={task.priority} onChange={e => setTask({ ...task, priority: e.target.value })} className="input-field">
+                    <option value="low">Low Priority</option>
+                    <option value="medium">Medium Priority</option>
+                    <option value="high">High Priority</option>
+                    <option value="critical">Critical</option>
+                  </select>
+                  <select value={task.department || ''} onChange={e => setTask({ ...task, department: e.target.value })} className="input-field">
+                    <option value="">Select department</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="Sales">Sales</option>
+                    <option value="Research">Research</option>
+                    <option value="Developer">Developer</option>
+                    <option value="Operations">Operations</option>
+                    <option value="Finance">Finance</option>
+                    <option value="HR">HR</option>
+                  </select>
+                </div>
+                <button onClick={handleCreateTask} className="btn-primary w-full flex items-center justify-center gap-2">
+                  <Send size={16} /> Create Task & Notify Client
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
 
       <AnimatePresence>

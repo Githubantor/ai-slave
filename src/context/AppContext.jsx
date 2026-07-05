@@ -112,6 +112,19 @@ export function AppProvider({ children }) {
     addNotification('Approval request was rejected');
   };
 
+  const createNewTask = async (taskData) => {
+    if (backendAvailable) {
+      try {
+        const created = await api.createTask(taskData);
+        setTasks(prev => [created, ...prev]);
+        return created;
+      } catch { /* fallback */ }
+    }
+    const local = { id: Date.now(), ...taskData, status: 'pending', progress: 0, createdAt: new Date().toISOString() };
+    setTasks(prev => [local, ...prev]);
+    return local;
+  };
+
   const updateTaskStatus = (id, status) => {
     setTasks(prev => prev.map(t => (t._id || t.id) === id ? { ...t, status } : t));
     if (backendAvailable) {
@@ -163,7 +176,7 @@ export function AppProvider({ children }) {
       tasks, approvals, activity, agents, goals, dashboardStats, notifications,
       ceoAnalysis, loading, backendAvailable,
       setApprovals, addActivity, addNotification, approveRequest, rejectRequest,
-      updateTaskStatus, runCeoAnalysis, setCeoAnalysis, refreshDashboard,
+      updateTaskStatus, runCeoAnalysis, setCeoAnalysis, refreshDashboard, createNewTask,
     }}>
       {children}
     </AppContext.Provider>

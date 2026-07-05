@@ -13,6 +13,8 @@ const taskSchema = new mongoose.Schema({
   progress: { type: Number, default: 0, min: 0, max: 100 },
   assignee: { type: mongoose.Schema.Types.ObjectId, ref: 'AIEmployee' },
   assigneeName: { type: String },
+  clientEmail: { type: String },
+  clientName: { type: String },
   goal: { type: mongoose.Schema.Types.ObjectId, ref: 'Goal' },
   organization: { type: mongoose.Schema.Types.ObjectId, ref: 'Organization', required: true },
   deadline: { type: Date },
